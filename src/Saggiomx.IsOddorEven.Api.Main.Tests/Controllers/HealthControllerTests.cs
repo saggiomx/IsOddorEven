@@ -36,11 +36,13 @@ namespace Saggiomx.IsOddorEven.Api.Main.Tests.Controllers
         {
             _healthController = new HealthController(_mockLogger.Object);
 
-            var result = _healthController.Ok();
+            var result = _healthController.Get();
 
-            Assert.NotNull(result);
             Assert.IsType<OkResult>(result);
-            Assert.Equal(200, result.StatusCode);
+
+            var okResult = result as OkResult;
+            Assert.NotNull(okResult);
+            Assert.Equal(200, okResult.StatusCode);
         }
     }
 }
