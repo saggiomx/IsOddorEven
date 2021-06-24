@@ -1,4 +1,5 @@
 
+using System;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 
@@ -12,7 +13,7 @@ namespace Saggiomx.IsOddorEven.Api.Main.Controllers
 
         public OddOrEvenController(ILogger<OddOrEvenController> logger)
         {
-            _logger = logger;
+            _logger = logger ?? throw new ArgumentNullException(nameof(HealthController));
         }
 
         [HttpGet]
