@@ -1,0 +1,29 @@
+{
+  "name": "isoodorevenautomationtests",
+  "version": "1.0.0",
+  "description": "testing IsOddOrEven web api",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/saggiomx/IsOddorEven.git"
+  },
+  "keywords": [
+    "testcafe",
+    "webapi",
+    "automation"
+  ],
+  "author": "Otmán Licona Ledezma",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/saggiomx/IsOddorEven/issues"
+  },
+  "homepage": "https://github.com/saggiomx/IsOddorEven#readme",
+  "dependencies": {
+    "axios": "^0.21.1",
+    "testcafe-reporter-html": "^1.4.6",
+    "tslog": "^3.2.0"
+  }
+}
