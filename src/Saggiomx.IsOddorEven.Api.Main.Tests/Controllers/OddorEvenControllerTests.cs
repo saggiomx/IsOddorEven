@@ -4,75 +4,46 @@ using Saggiomx.IsOddorEven.Api.Main.Controllers;
 using Microsoft.Extensions.Logging;
 using Moq;
 using Microsoft.AspNetCore.Mvc;
+using Saggiomx.IsOddorEven.Api.Main.Model;
+using Saggiomx.IsOddorEven.Api.Main.Servic;
+using Saggiomx.IsOddorEven.Api.Main.Validator;
 
 namespace Saggiomx.IsOddorEven.Api.Main.Tests.Controllers
 {
     public class OddorEvenControllerTests
     {
         private Mock<ILogger<OddOrEvenController>> _mockLogger;
-        private OddOrEvenController _oddOrEvenController;
+        private Mock<INumberValidator> _validator;
+        private Mock<IIsOddOrEvenService> _service;
+
+        private OddOrEvenController controller;
 
         public OddorEvenControllerTests()
         {
-            _mockLogger = new Mock<ILogger<OddOrEvenController>>();
+            _mockLogger = new Mock<ILogger<OddOrEvenController>>(MockBehavior.Loose);
+            _validator = new Mock<INumberValidator>(MockBehavior.Strict);
+            _service = new Mock<IIsOddOrEvenService>();
         }
 
         [Fact]
-        public void OddOrEvenController_Constructor_ArgumentNullException()
+        public void OddOrEvenController_IsEven()
         {
-            Assert.Throws<ArgumentNullException>(() => new OddOrEvenController(null));
-        }
+            //arrange
+            _validator.Setup(v => v.IsValid(It.IsAny<string>())).Returns(true);
+            _service.Setup(s => s.HasReminder(It.IsAny<int>(), It.IsAny<int>())).Returns(true);
 
-        [Fact]
-        public void OddOrEvenController_Constructor_Success()
-        {
-            _oddOrEvenController = new OddOrEvenController(_mockLogger.Object);
+            controller = new OddOrEvenController(_validator.Object, _service.Object, _mockLogger.Object);
 
-            Assert.NotNull(_oddOrEvenController);
-            Assert.IsType<OddOrEvenController>(_oddOrEvenController);
-        }
-
-        [Theory]
-        [InlineData(2, true)]
-        [InlineData(3, false)]
-        public void OddOrEvenController_IsEven(int value, bool expected)
-        {
-            _oddOrEvenController = new OddOrEvenController(_mockLogger.Object);
-
-            var result = _oddOrEvenController.IsEven(value);
-
-            Assert.IsType<bool>(result);
-            Assert.Equal(result, expected);
-        }
-
-        [Theory]
-        [InlineData(2, false)]
-        [InlineData(3, true)]
-        public void OddOrEvenController_IsOdd(int value, bool expected)
-        {
-            _oddOrEvenController = new OddOrEvenController(_mockLogger.Object);
-
-            var result = _oddOrEvenController.IsOdd(value);
-
-            Assert.IsType<bool>(result);
-            Assert.Equal(result, expected);
-        }
-
-        [Theory]
-        [InlineData(2, "Even")]
-        [InlineData(3, "Odd")]
-        public void OddOrEvenController_IsOddOrEven_Ok(int value, string expected)
-        {
-            _oddOrEvenController = new OddOrEvenController(_mockLogger.Object);
-
-            var result = _oddOrEvenController.IsOddOrEven(value);
-
-            Assert.IsType<OkObjectResult>(result);
+            var result = controller.IsEven(It.IsAny<string>());
 
             var okResult = result as OkObjectResult;
             Assert.NotNull(okResult);
             Assert.Equal(200, okResult.StatusCode);
-            Assert.Equal(expected, okResult.Value);
+            Assert.Equal(false,okResult.Value);
+
+            _validator.Verify(v=> v.IsValid(It.IsAny<string>()), Times.Once);
+            _service.Verify(s => s.HasReminder(It.IsAny<int>(), It.IsAny<int>()), Times.Once);
         }
+
     }
 }
