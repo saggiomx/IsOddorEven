@@ -3,12 +3,16 @@ using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using System.Threading.Tasks;
+using Autofac;
+using Autofac.Core;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.OpenApi.Models;
+using Saggiomx.IsOddorEven.Api.Main.Servic;
+using Saggiomx.IsOddorEven.Api.Main.Validator;
 
 namespace Saggiomx.IsOddorEven.Api.Main
 {
@@ -25,7 +29,8 @@ namespace Saggiomx.IsOddorEven.Api.Main
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-
+            services.AddScoped<INumberValidator, NumberValidator>();
+            services.AddScoped<IIsOddOrEvenService, IsOddOrEvenService>();
             services.AddControllers();
             services.AddSwaggerGen(c =>
             {
