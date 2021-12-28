@@ -20,7 +20,7 @@ namespace Saggiomx.IsOddorEven.Api.Main.Servic
             }
             catch (DivideByZeroException ex)
             {
-                throw ex;
+                throw;
             }
         }
 
